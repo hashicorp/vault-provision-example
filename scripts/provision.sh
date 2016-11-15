@@ -3,7 +3,7 @@ set -e
 
 shopt -s nullglob
 
-function mirror() {
+function provision() {
   set +e
   pushd "$1" > /dev/null
   for f in $(ls "$1"/*.json); do
@@ -25,10 +25,10 @@ echo "Verifying Vault is unsealed"
 vault status > /dev/null
 
 pushd data >/dev/null
-mirror sys/auth
-mirror sys/mounts
-mirror sys/policy
-mirror postgresql/config
-mirror postgresql/roles
-mirror auth/userpass/users
+provision sys/auth
+provision sys/mounts
+provision sys/policy
+provision postgresql/config
+provision postgresql/roles
+provision auth/userpass/users
 popd > /dev/null
