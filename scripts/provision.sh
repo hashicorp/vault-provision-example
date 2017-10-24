@@ -6,7 +6,7 @@ shopt -s nullglob
 function provision() {
   set +e
   pushd "$1" > /dev/null
-  for f in $(ls "$1"/*.json); do
+  find . -maxdepth 1 -name "*.json" -type f -printf "%f\n" | while read f; do
     p="$1/${f%.json}"
     echo "Provisioning $p"
     curl \
