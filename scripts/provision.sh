@@ -3,6 +3,11 @@ set -e
 
 shopt -s nullglob
 
+function getCli() {
+  wget https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip vault.zip
+  unzip vault.zip
+}
+
 function provision() {
   set +e
   pushd "$1" > /dev/null
@@ -20,6 +25,9 @@ function provision() {
   popd > /dev/null
   set -e
 }
+
+echo "Downloading Vault CLI"
+getCli
 
 echo "Verifying Vault is unsealed"
 vault status > /dev/null
