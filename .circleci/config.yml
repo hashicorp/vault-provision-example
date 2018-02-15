@@ -16,18 +16,18 @@ jobs:
 
     environment:
       - VAULT_ADDR=my.vault.url
-      - VAULT_TOKEN=root
+      - VAULT_TOKEN=my_token
     working_directory: ~/repo
 
     steps:
       - checkout
 
       # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
+      #- restore_cache:
+         # keys:
+         #- v1-dependencies-{{ checksum "Gemfile.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          #- v1-dependencies-
 
       - run:
           name: run bash 

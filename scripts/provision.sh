@@ -6,6 +6,7 @@ shopt -s nullglob
 function getCli() {
   wget https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip
   unzip vault_0.9.3_linux_amd64.zip
+  export PATH=$PATH:$(pwd)
 }
 
 function provision() {
