@@ -3,41 +3,31 @@ set -e
 
 shopt -s nullglob
 
-function getCli() {
-  wget https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip
-  unzip vault_0.9.3_linux_amd64.zip
-  export PATH=$PATH:$(pwd)
-}
-
 function provision() {
   set +e
   pushd "$1" > /dev/null
   for f in $(ls "$1"/*.json); do
     p="$1/${f%.json}"
     echo "Provisioning $p"
-    curl \
-      --silent \
-      --location \
-      --fail \
-      --header "X-Vault-Token: ${VAULT_TOKEN}" \
-      --data @"${f}" \
-      "${VAULT_ADDR}/v1/${p}"
+    # echo runnin curl --location --fail --header "X-Vault-Token: ${VAULT_TOKEN}" --data @"${f}" "${VAULT_ADDR}/v1/${p}"
+    curl --silent --location --fail --header "X-Vault-Token: ${VAULT_TOKEN}" --data @"${f}" "${VAULT_ADDR}/v1/${p}"
   done
   popd > /dev/null
   set -e
 }
 
-echo "Downloading Vault CLI"
-getCli
-
 echo "Verifying Vault is unsealed"
 vault status > /dev/null
 
-pushd data >/dev/null
+pushd ../data >/dev/null
 provision sys/auth
 provision sys/mounts
 provision sys/policy
 provision postgresql/config
 provision postgresql/roles
 provision auth/userpass/users
+provision secret/app1/dev
+provision secret/app1/prod
+provision secret/app2/dev
+provision secret/app2/prod
 popd > /dev/null

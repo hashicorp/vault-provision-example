@@ -1,1 +1,1 @@
-{"rules":"path \"postgresql/creds/readonly\" {\n  capabilities = [\"read\"]\n}"}
+{"policy":"path \"postgresql/creds/readonly\" {\n  capabilities = [\"read\"]\n}"}
