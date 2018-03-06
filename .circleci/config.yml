@@ -1,0 +1,54 @@
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+       - image: circleci/ruby:2.4.1-node-browsers
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    environment:
+      - VAULT_ADDR=https://my.vault.url
+      - VAULT_TOKEN=my_token
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Remove this if you already have Vault installed
+      # In that case just make sure VAULT_ADDR and VAULT_TOKEN receive correct value
+      - run:
+        name: Install demo Vault 
+        command: |
+          bash scripts/install_demo.sh
+      
+      # Remove this if you already have an existing DB
+      # name: Database setup
+      #    command: |
+      #    bash scripts/db_demo.sh
+
+      - run:
+          name: Provision Vault
+          command: |
+            bash scripts/provision.sh
+
+      # Run tests
+      - run:
+          name: Run tests
+          command: |
+            bash scripts/tests.sh
+            #TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
+
+      # collect reports
+      # - store_test_results:
+          # path: /tmp/test-results
+      # - store_artifacts:
+          # path: /tmp/test-results
+          # destination: test-results
