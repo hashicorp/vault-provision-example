@@ -1,1 +1,1 @@
-{"connection_url":"postgresql://stenio:mypassword@stenioferreira-vaulttest.cs4olt6t13fa.us-east-2.rds.amazonaws.com", "plugin_name":"postgresql-database-plugin"}
+{"connection_url":"postgresql://DB_CONNECTION_STRING", "plugin_name":"postgresql-database-plugin"}
