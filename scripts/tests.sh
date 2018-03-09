@@ -2,25 +2,34 @@
 set -e
 
 echo -e '\n ... Auth: Validate UserPass enabled'
-if vault read sys/auth | grep userpass > /dev/null; then
+OUTPUT=$(curl \
+    --silent \
+    --header "X-Vault-Token: $VAULT_TOKEN" \
+    $VAULT_ADDR/v1/sys/auth)
+if echo $OUTPUT | grep userpass > /dev/null; then
     echo SUCCESS - UserPass enabled
 else
     echo FAIL - Could not find UserPass enabled
 fi
 
 echo -e '\n ... Auth: User "me" exists'
-AUTH_OUTPUT=$(curl \
+OUTPUT=$(curl \
     --silent \
     --header "X-Vault-Token: $VAULT_TOKEN" \
     $VAULT_ADDR/v1/auth/userpass/users/me)
-if echo $AUTH_OUTPUT | grep policies > /dev/null; then
+if echo $OUTPUT | grep policies > /dev/null; then
     echo SUCCESS - User \"me\" exists
 else
     echo FAIL - Could not find user \"me\"
 fi
 
 echo -e '\n ... Postgres: Validate Postgresql mounted'
-if vault read /sys/mounts | grep postgresql > /dev/null; then
+OUTPUT=$(curl \
+    --silent \
+    --request LIST \
+    --header "X-Vault-Token: $VAULT_TOKEN" \
+    $VAULT_ADDR/v1/database/config)
+if echo $OUTPUT | grep postgres > /dev/null; then
     echo SUCCESS - postgresql mounted
 else
     echo FAIL - Could not find postgresql mounted
@@ -31,9 +40,9 @@ echo -e '\n ... Postgres: Can create user'
 CREATE_OUTPUT=$(curl \
     --silent \
     --header "X-Vault-Token: $VAULT_TOKEN" \
-    $VAULT_ADDR/v1/postgresql/creds/readonly)
-
- if echo $CREATE_OUTPUT | grep username > /dev/null; then
+    $VAULT_ADDR/v1/database/creds/readonly)
+echo create output is $CREATE_OUTPUT
+if echo $CREATE_OUTPUT | grep username > /dev/null; then
     echo SUCCESS - Able to dynamically create postgresql user
 else
     echo FAIL - Could not dynamically create postgresql user
