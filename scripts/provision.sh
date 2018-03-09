@@ -9,8 +9,8 @@ function provision() {
   for f in $(ls "$1"/*.json); do
     p="$1/${f%.json}"
     echo "Provisioning $p"
-    # echo runnin curl --location --fail --header "X-Vault-Token: ${VAULT_TOKEN}" --data @"${f}" "${VAULT_ADDR}/v1/${p}"
-    curl --silent --location --fail --header "X-Vault-Token: ${VAULT_TOKEN}" --data @"${f}" "${VAULT_ADDR}/v1/${p}"
+    # echo running curl --location --fail --header "X-Vault-Token: ${VAULT_TOKEN}" --data @"${f}" "${VAULT_ADDR}/v1/${p}"
+    curl  --location --fail --header "X-Vault-Token: ${VAULT_TOKEN}" --data @"${f}" "${VAULT_ADDR}/v1/${p}"
   done
   popd > /dev/null
   set -e
@@ -23,8 +23,8 @@ pushd ../data >/dev/null
 provision sys/auth
 provision sys/mounts
 provision sys/policy
-provision postgresql/config
-provision postgresql/roles
+provision database/config
+provision database/roles
 provision auth/userpass/users
 provision secret/app1/dev
 provision secret/app1/prod
