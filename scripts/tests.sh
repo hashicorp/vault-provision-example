@@ -70,12 +70,7 @@ else
 fi
 
 echo -e '\n ... Policy: Validate postgresql policy written'
-OUTPUT=$(curl \
-    --silent \
-    --request LIST \
-    --header "X-Vault-Token: $VAULT_TOKEN" \
-    $VAULT_ADDR/v1/sys/policies/acl)
-if echo $OUTPUT | grep "postgresql-readonly" > /dev/null; then
+if vault list sys/policies/acl | grep 'postgresql-readonly' > /dev/null; then
     echo SUCCESS - Policy postgresql-readonly enabled
 else
     echo FAIL - Could not find policy postgresql-readonly

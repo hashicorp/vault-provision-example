@@ -1,3 +1,2 @@
 vault/vagrant/.vagrant
 vault/terraform/terraform.state
-scripts/env.local
