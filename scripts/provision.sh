@@ -16,6 +16,16 @@ function provision() {
   set -e
 }
 
+echo "If not on CircleCI, apply env vars (for testing locally)"
+if [ "$CIRCLECI" != "true" ]; then
+    echo "Applying local env vars"
+    source env.local
+fi
+
+echo "Applying env variables to config files"
+sed -e "s/DATABASE_CONNECTION_STRING/$DB_USERNAME:$DB_PASSWORD@$DB_URL/g" \
+  templates/connection.json > ../data/database/config/postgres/connection.json
+
 echo "Verifying Vault is unsealed"
 vault status > /dev/null
 
@@ -31,3 +41,6 @@ provision secret/app1/prod
 provision secret/app2/dev
 provision secret/app2/prod
 popd > /dev/null
+
+echo "Restoring config files"
+cat templates/connection.json > ../data/database/config/postgres/connection.json
