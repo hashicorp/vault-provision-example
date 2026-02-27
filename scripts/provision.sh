@@ -6,7 +6,7 @@ shopt -s nullglob
 function provision() {
   set +e
   pushd "$1" > /dev/null
-  for f in $(ls "$1"/*.json); do
+  for f in $(ls *.json); do
     p="$1/${f%.json}"
     echo "Provisioning $p"
     curl \
