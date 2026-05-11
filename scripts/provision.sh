@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright IBM Corp. 2016, 2026
+
 set -e
 
 shopt -s nullglob
